@@ -5,25 +5,19 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include "../Ipc/ipc.h"
 
 int main(){
-    int sockfd;
-    struct sockaddr_in address;
-    int len;
-    int result;
     char ch = 'A';
+    int result;
 
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    address.sin_family = AF_INET;
-    address.sin_port = 9345;
-    address.sin_addr.s_addr = inet_addr("127.0.0.1");
-    len = sizeof(address);
+    IpcClient client;
 
-    result = connect(sockfd, (struct sockaddr*)&address, (socklen_t)len);
+    result = connect(client.sockfd, (struct sockaddr*)&client.address, (socklen_t)client.len);
     std::cout<<result<<"\n"<<std::endl;
-    write(sockfd, &ch, 1);
-    read(sockfd, &ch, 1);
+    write(client.sockfd, &ch, 1);
+    read(client.sockfd, &ch, 1);
     std::cout<<"char from server  = "<<ch<<"\n"<<std::endl;
-    close(sockfd);
+    close(client.sockfd);
     exit(0);
 }
