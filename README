@@ -1,0 +1,8 @@
+//Contents
+server_side //サーバ側のコード
+client_side //クライアント側のコード
+Ipc //プロセス間通信の初期設定を行うクラス
+
+//Usage
+ビルドファイル内のserver_side*/server_sideを実行後、
+ビルドファイル内のclient_side*/client_sideを実行。
