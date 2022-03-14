@@ -10,20 +10,23 @@
 int main(){
     char ch;
 
-    unlink("server_socket");
-
     IpcServer server;
     IpcClient client;
 
     bind(server.sockfd, (struct sockaddr*)&server.address, server.len);
 
     listen(server.sockfd, 5);
-
+    while(1){
     client.sockfd = accept(server.sockfd, (struct sockaddr*)&client.address, (socklen_t *)&client.len);
 
-    read(client.sockfd, &ch, 1);
+    int rlen=recv(client.sockfd, &ch, sizeof(ch), 0);
+    if(rlen<0) perror("recv error");
+
     ch++;
-    write(client.sockfd, &ch, 1);
+
+    int slen=send(client.sockfd, &ch, sizeof(ch), 0);
+    if(slen<0) perror("send error");
 
     close(client.sockfd);
+    }
 }

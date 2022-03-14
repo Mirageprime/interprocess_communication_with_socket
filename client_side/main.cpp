@@ -14,10 +14,18 @@ int main(){
     IpcClient client;
 
     result = connect(client.sockfd, (struct sockaddr*)&client.address, (socklen_t)client.len);
-    std::cout<<result<<"\n"<<std::endl;
-    write(client.sockfd, &ch, 1);
-    read(client.sockfd, &ch, 1);
-    std::cout<<"char from server  = "<<ch<<"\n"<<std::endl;
+    if (result != 0){
+        std::cout<<"socket connect error"<<errno<<"\n";
+    }
+
+    int slen=send(client.sockfd, &ch, sizeof(ch), 0);
+    if(slen<0) perror("send error");
+
+    int rlen=recv(client.sockfd, &ch, sizeof(ch), 0);
+    if(rlen<0) perror("recv error");
+
+    std::cout<<"char from server  = "<<ch<<"\n";
     close(client.sockfd);
+
     exit(0);
 }
